@@ -1,0 +1,790 @@
+/* ID Card Styles - 55mm x 87mm (207px x 328px @ 96 DPI) */
+
+/* Card Wrapper */
+.id-card-wrapper {
+    display: inline-block;
+    margin: 10px;
+}
+
+/* Base ID Card */
+.id-card {
+    width: 207px;
+    height: 328px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 15px;
+    page-break-inside: avoid;
+    font-family: Arial, sans-serif;
+}
+
+/* ================================
+   DESIGN 1: Professional Blue Waves
+   ================================ */
+
+/* Front Side - Design 1 */
+.design1-front {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.design1-front .wave-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.design1-front .wave-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+}
+
+.design1-front .wave-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+}
+
+.design1-front .logo-section {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+.design1-front .logo-box {
+    width: 45px;
+    height: 45px;
+    background: white;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: bold;
+    color: #0d6efd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.design1-front .photo-section {
+    position: absolute;
+    top: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 110px;
+    height: 110px;
+    z-index: 10;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 5px solid white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: white;
+}
+
+.design1-front .student-photo {
+    width: 100%;
+    height: 100%;
+    /* object-fit: cover; */
+}
+
+.design1-front .info-section {
+    position: absolute;
+    bottom: 30px;
+    left: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.design1-front .student-name {
+    font-size: 13px;
+    font-weight: bold;
+    color: #0d6efd;
+    margin: 0 0 4px 0;
+    line-height: 1.2;
+}
+
+.design1-front .student-class {
+    font-size: 10px;
+    color: #666;
+    margin: 0 0 8px 0;
+    font-weight: 600;
+}
+
+.design1-front .details {
+    text-align: left;
+    font-size: 9px;
+    color: #333;
+}
+
+.design1-front .detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3px;
+    padding: 2px 0;
+    border-bottom: 1px dotted #ddd;
+}
+
+.design1-front .detail-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.design1-front .label {
+    font-weight: bold;
+    color: #555;
+}
+
+.design1-front .value {
+    color: #333;
+}
+
+.design1-front .school-footer {
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    padding: 0 10px;
+    line-height: 1.2;
+}
+
+/* Back Side - Design 1 */
+.design1-back {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.design1-back .wave-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.design1-back .wave-top-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+}
+
+.design1-back .wave-bottom-back {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+}
+
+.design1-back .back-logo {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.design1-back .logo-box-small {
+    width: 50px;
+    height: 50px;
+    background: white;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: bold;
+    color: #0d6efd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.design1-back .back-info {
+    position: absolute;
+    top: 90px;
+    left: 15px;
+    right: 15px;
+    background: white;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.design1-back .back-info h4 {
+    font-size: 12px;
+    color: #0d6efd;
+    margin: 0 0 8px 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+.design1-back .info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 8px;
+    color: #333;
+}
+
+.design1-back .info-list li {
+    margin-bottom: 4px;
+    padding-left: 8px;
+    position: relative;
+}
+
+.design1-back .info-list li:before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: #0d6efd;
+}
+
+.design1-back .qr-section {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+.design1-back .qr-placeholder {
+    width: 70px;
+    height: 70px;
+    background: white;
+    border-radius: 5px;
+    padding: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+}
+
+.design1-back .qr-label {
+    font-size: 7px;
+    color: #666;
+    margin-top: 4px;
+    margin-bottom: 0;
+}
+
+.design1-back .signature-section {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    text-align: center;
+}
+
+.design1-back .signature-line {
+    width: 80px;
+    height: 1px;
+    background: #333;
+    margin-bottom: 3px;
+}
+
+.design1-back .signature-label {
+    font-size: 7px;
+    color: #666;
+    margin: 0;
+}
+
+/* ================================
+   DESIGN 2: Classic Orange
+   ================================ */
+
+.design2-front {
+    background: #ffffff;
+    color: #2c2c2c;
+}
+
+.design2-front .design2-curve {
+    position: absolute;
+    top: -65px;
+    left: -15px;
+    width: 240px;
+    height: 185px;
+    background: linear-gradient(180deg, #ffd194 0%, #ff7e5f 75%);
+    border-bottom-left-radius: 65% 75%;
+    border-bottom-right-radius: 65% 75%;
+}
+
+.design2-front .emblem-circle {
+    position: absolute;
+    top: 28px;
+    right: 18px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: bold;
+    color: #ff7043;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.design2-front .id-pill {
+    position: absolute;
+    top: 135px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 20px;
+    background: #e53935;
+    color: white;
+    font-weight: bold;
+    border-radius: 999px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    z-index: 3;
+}
+
+.design2-front .photo-frame {
+    position: absolute;
+    top: 95px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 140px;
+    border: 4px solid #e53935;
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+    z-index: 2;
+}
+
+.design2-front .photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.design2-front .school-block {
+    position: absolute;
+    top: 25px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.design2-front .school-block .bn-name {
+    font-size: 13px;
+    color: #c62828;
+    font-weight: 700;
+    margin: 0;
+}
+
+.design2-front .school-block .en-name {
+    font-size: 9px;
+    color: #0d47a1;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 2px 0 0 0;
+    font-weight: 600;
+}
+
+.design2-front .student-highlight {
+    position: absolute;
+    top: 240px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 3;
+}
+
+.design2-front .student-highlight h3 {
+    font-size: 16px;
+    color: #c62828;
+    margin: 0;
+    font-weight: 700;
+}
+
+.design2-front .info-card {
+    position: absolute;
+    top: 250px;
+    left: 10px;
+    right: 10px;
+    background: white;
+    border-radius: 12px;
+    padding: 12px 14px 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+    font-size: 9px;
+}
+
+.design2-front .info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+    border-bottom: 1px dotted #ffccbc;
+}
+
+.design2-front .info-row:last-child {
+    border-bottom: none;
+}
+
+.design2-front .info-row .label {
+    text-transform: uppercase;
+    color: #5d4037;
+    font-weight: 700;
+    margin-right: 8px;
+    flex-basis: 40%;
+    font-size: 8px;
+}
+
+.design2-front .info-row .value {
+    color: #111;
+    font-weight: 600;
+    text-align: right;
+    flex: 1;
+    font-size: 9px;
+}
+
+.design2-front .signature-strip {
+    position: absolute;
+    bottom: 50px;
+    left: 12px;
+    right: 12px;
+    display: flex;
+    align-items: flex-end;
+}
+
+.design2-front .signature-strip::before {
+    content: "";
+    display: block;
+    width: 90px;
+    height: 1px;
+    background: #333;
+    margin-right: 8px;
+}
+
+.design2-front .signature-strip .signature-text {
+    font-size: 8px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #555;
+}
+
+.headteacher-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 34px;
+    background: #c62828;
+}
+
+.headteacher-bar span {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 34px;
+    width: 70%;
+    background: #ff9800;
+    color: #fff;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.headteacher-bar span::before {
+    content: "";
+    position: absolute;
+    left: -18px;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-top: 17px solid transparent;
+    border-bottom: 17px solid transparent;
+    border-right: 18px solid #ff9800;
+}
+
+.design2-back {
+    background: #fff8f1;
+    color: #37474f;
+}
+
+.design2-back .back-header {
+    text-align: center;
+    padding-top: 20px;
+}
+
+.design2-back .logo-square {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    background: white;
+    border: 3px solid #ffb74d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: bold;
+    color: #fb8c00;
+    margin: 0 auto 8px;
+}
+
+.design2-back .back-header h4 {
+    margin: 0;
+    font-size: 13px;
+    color: #d84315;
+}
+
+.design2-back .back-header p {
+    margin: 2px 0 10px 0;
+    font-size: 9px;
+    color: #6d6d6d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.design2-back .back-details {
+    margin: 0 15px;
+    background: white;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    font-size: 9px;
+}
+
+.design2-back .detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px dashed #ffe0b2;
+}
+
+.design2-back .detail-row:last-child {
+    border-bottom: none;
+}
+
+.design2-back .detail-row span {
+    color: #6d6d6d;
+    font-weight: 600;
+}
+
+.design2-back .detail-row strong {
+    color: #212121;
+    text-align: right;
+}
+
+.design2-back .instruction-box {
+    margin: 12px 15px 0;
+    background: #fff;
+    border-left: 3px solid #ff9800;
+    padding: 10px;
+    font-size: 8px;
+}
+
+.design2-back .instruction-box p {
+    margin: 0 0 6px 0;
+    font-weight: bold;
+    color: #d84315;
+}
+
+.design2-back .instruction-box ul {
+    padding-left: 15px;
+    margin: 0;
+    color: #4e342e;
+}
+
+.design2-back .instruction-box li {
+    margin-bottom: 3px;
+}
+
+.design2-back .contact-box {
+    margin: 12px 15px 0;
+    font-size: 8px;
+    color: #424242;
+    line-height: 1.4;
+}
+
+.design2-back .back-signature {
+    position: absolute;
+    bottom: 20px;
+    right: 15px;
+    text-align: center;
+    font-size: 8px;
+    color: #6d6d6d;
+}
+
+.design2-back .back-signature .line {
+    width: 90px;
+    height: 1px;
+    background: #6d6d6d;
+    margin-bottom: 4px;
+}
+
+/* Print Styles */
+@media print {
+    .id-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+
+    .id-card-wrapper {
+        margin: 5px;
+    }
+}
+
+/* Enhanced Print Styles - No Backgrounds */
+@media print {
+
+    /* Base card styles for print */
+    .id-card {
+        box-shadow: none;
+        border: 2px solid #333 !important;
+        background: white !important;
+    }
+
+    .id-card-wrapper {
+        margin: 5px;
+    }
+
+    /* Remove all gradient backgrounds for print - Design 1 */
+    .design1-front {
+        background: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .design1-back {
+        background: #f8f9fa !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* Remove all gradient backgrounds for print - Design 2 */
+    .design2-front {
+        background: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .design2-back {
+        background: #f8f9fa !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* Hide decorative waves in print */
+    .wave-background,
+    .wave-top,
+    .wave-bottom,
+    .wave-top-back,
+    .wave-bottom-back {
+        display: none !important;
+    }
+
+    /* Simplify gradient pieces for Design 2 */
+    .design2-front .design2-curve {
+        display: none !important;
+    }
+
+    /* Ensure text is visible without gradient backgrounds */
+    .design1-front .school-footer {
+        color: #0d6efd !important;
+        text-shadow: none !important;
+        font-weight: bold;
+        border-top: 2px solid #0d6efd;
+        padding-top: 5px;
+        background: white;
+    }
+
+    /* Info sections with subtle background */
+    .design1-front .info-section {
+        background: #f8f9fa !important;
+        border: 1px solid #ddd;
+    }
+
+    .design2-front .info-card {
+        background: white !important;
+        border: 1px solid #ddd;
+        padding: 4px 6px;
+    }
+
+    .headteacher-bar {
+        background: white !important;
+        border-top: 1px solid #333;
+    }
+
+    .headteacher-bar .headteacher-ribbon {
+        background: white !important;
+        color: #000 !important;
+    }
+
+    .headteacher-bar .headteacher-ribbon::before {
+        display: none !important;
+    }
+
+    /* Photo borders */
+    .design1-front .photo-section,
+    .design2-front .photo-frame {
+        border: 3px solid #333 !important;
+    }
+
+    /* Logo boxes - hide text, show only border */
+    .logo-box,
+    .logo-box-small,
+    .logo-back,
+    .emblem-circle,
+    .logo-square {
+        border: 2px solid #333 !important;
+        color: transparent !important;
+        font-size: 0 !important;
+    }
+
+    /* Ensure all text is visible and printed */
+    .student-name,
+    .student-highlight h3,
+    .info-card,
+    .info-row,
+    .info-row .label,
+    .info-row .value,
+    .detail-row,
+    .school-footer,
+    .school-block,
+    .design2-front .signature-strip .signature-text,
+    .design2-back .instruction-box,
+    .design2-back .contact-box {
+        color: #000 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: block !important;
+    }
+
+    /* Back side info sections */
+    .design1-back .back-info,
+    .design2-back .back-details,
+    .design2-back .instruction-box {
+        border: 1px solid #ddd;
+        background: white !important;
+    }
+
+    .detail-row,
+    .info-row {
+        display: flex !important;
+    }
+}
+
+/* Hide back side cards in print */
+.design1-back,
+.design2-back {
+    display: none !important;
+    visibility: hidden !important;
+}

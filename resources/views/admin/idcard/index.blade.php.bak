@@ -1,0 +1,294 @@
+﻿@extends('layouts.admin')
+
+@section('title', 'ID Card Create')
+
+@section('content')
+<div class="row">
+    <div class="col-md-10 mx-auto">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">ID Card Generator</h4>
+            </div>
+            <div class="card-body">
+                <form action="{{ route('admin.idcard.generate') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    
+                    <!-- School Selection -->
+                    <div class="mb-4">
+                        <label for="user_id" class="form-label fw-bold">স্কুল / ইউজার নির্বাচন করুন</label>
+                        <select name="user_id" id="user_id" class="form-select form-select-lg" required>
+                            <option value="">-- স্কুল নির্বাচন করুন --</option>
+                            @foreach($users as $user)
+                                <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                                    {{ $user->name }} ({{ $user->email }})
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('user_id')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Class Selection -->
+                    <div class="mb-4">
+                        <label for="class" class="form-label fw-bold">ক্লাস নির্বাচন করুন (ঐচ্ছিক)</label>
+                        <select name="class" id="class" class="form-select form-select-lg" {{ old('user_id') ? '' : 'disabled' }}>
+                            <option value="">-- সকল ক্লাস --</option>
+                        </select>
+                        <div class="form-text">Leave empty to generate ID cards for all classes of the selected school.</div>
+                        @error('class')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Custom Background Upload -->
+                    <div class="mb-4">
+                        <label for="custom_design" class="form-label fw-bold">Custom Background (PNG)</label>
+                        <div class="input-group">
+                            <input type="file" name="custom_design" id="custom_design" class="form-control" accept="image/png">
+                            <button class="btn btn-outline-secondary" type="button" id="previewCustom">Preview</button>
+                        </div>
+                        <div class="form-text">Upload a 55mm x 87mm PNG, similar to the sample below.</div>
+                        <img src="{{ asset('images/idcard-sample.png') }}" alt="Sample design" class="mt-3 rounded" style="max-width: 250px;">
+                        <div id="customPreviewWrapper" class="mt-4 d-none">
+                            <p class="fw-bold small text-secondary mb-2 text-uppercase">Uploaded Preview</p>
+                            <div class="custom-upload-preview">
+                                <img id="customPreview" src="" alt="Custom preview" class="custom-upload-preview__bg">
+                                <div class="custom-upload-preview__content">
+                                    <div class="preview-photo"></div>
+                                    <h6 class="mb-1">Student Name</h6>
+                                    <small class="text-muted d-block mb-2">School Name</small>
+                                    <div class="preview-info"><span>Class:</span> Five</div>
+                                    <div class="preview-info"><span>ID No:</span> 123456</div>
+                                    <div class="preview-info"><span>Roll:</span> 15</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Design Selection -->
+                    <!-- <div class="mb-4">
+                        <label class="form-label fw-bold">ID Card Design</label>
+                        
+                        @php $selectedDesign = old('design', 'design1'); @endphp
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <input type="radio" class="btn-check" name="design" id="design1Option" value="design1" {{ $selectedDesign === 'design1' ? 'checked' : '' }}>
+                                <label class="w-100" for="design1Option">
+                                    <div class="card h-100 {{ $selectedDesign === 'design1' ? 'border-primary shadow' : '' }}">
+                                    <div class="card-body text-center">
+                                        <div class="border rounded p-3">
+                                            <h5 class="text-primary mb-3">Professional Blue</h5>
+                                            <div class="id-card-preview" style="width: 207px; height: 328px; margin: 0 auto; border: 2px solid #0d6efd; border-radius: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                                                <div style="position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; background: white; border-radius: 4px;"></div>
+                                                <div style="position: absolute; top: 70px; left: 50%; transform: translateX(-50%); width: 100px; height: 100px; background: white; border-radius: 50%; border: 4px solid white;"></div>
+                                                <div style="position: absolute; bottom: 80px; left: 20px; right: 20px; background: rgba(255,255,255,0.95); border-radius: 8px; padding: 15px; text-align: center;">
+                                                    <div style="font-size: 11px; color: #333; font-weight: bold;">STUDENT NAME</div>
+                                                    <div style="font-size: 9px; color: #666; margin-top: 5px;">Class & Section</div>
+                                                </div>
+                                                <div style="position: absolute; bottom: 20px; left: 0; right: 0; text-align: center; color: white; font-size: 10px; font-weight: bold;">SCHOOL NAME</div>
+                                            </div>
+                                            <div class="mt-3">
+                                                <span class="badge bg-primary">Gradient</span>
+                                                <span class="badge bg-info">Modern</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="radio" class="btn-check" name="design" id="design2Option" value="design2" {{ $selectedDesign === 'design2' ? 'checked' : '' }}>
+                                <label class="w-100" for="design2Option">
+                                    <div class="card h-100 {{ $selectedDesign === 'design2' ? 'border-primary shadow' : '' }}">
+                                    <div class="card-body text-center">
+                                        <div class="border rounded p-3">
+                                            <h5 class="text-danger mb-3">Classic Orange</h5>
+                                            <div class="id-card-preview" style="width: 207px; height: 328px; margin: 0 auto; border: 2px solid #f05a28; border-radius: 8px; background: linear-gradient(180deg, #ffe9c8 0%, #ffffff 50%); position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                                                <div style="position: absolute; top: -20px; left: -10px; width: 230px; height: 150px; background: linear-gradient(180deg, #ffc371 0%, #ff5f6d 100%); border-bottom-left-radius: 50% 70%; border-bottom-right-radius: 50% 70%;"></div>
+                                                <div style="position: absolute; top: 20px; right: 20px; width: 48px; height: 48px; border-radius: 50%; background: white; border: 3px solid rgba(255,255,255,0.6);"></div>
+                                                <div style="position: absolute; top: 15px; left: 50%; transform: translateX(-50%); background: #e53935; color: white; padding: 3px 15px; font-weight: bold; border-radius: 20px; font-size: 10px;">ID CARD</div>
+                                                <div style="position: absolute; top: 55px; left: 50%; transform: translateX(-50%); width: 120px; height: 130px; border: 4px solid #e53935; border-radius: 6px; background: white;"></div>
+                                                <div style="position: absolute; top: 190px; left: 15px; right: 15px; text-align: left; font-size: 9px;">
+                                                    <p style="font-weight: bold; color: #e53935; margin-bottom: 4px; text-align:center;">Md. Mahadi Hasan</p>
+                                                    <p style="margin-bottom: 2px;"><strong>Father:</strong> Sample</p>
+                                                    <p style="margin-bottom: 2px;"><strong>Class:</strong> Eight</p>
+                                                    <p style="margin-bottom: 0;"><strong>Mobile:</strong> 01XXXXXXXXX</p>
+                                                </div>
+                                                <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(90deg, #d32f2f 0%, #f57c00 70%); color: white; font-size: 9px; font-weight: bold; padding: 6px 10px; display: flex; justify-content: space-between; align-items: center;">
+                                                    <span>Signature</span>
+                                                    <span>Head Teacher</span>
+                                                </div>
+                                            </div>
+                                            <div class="mt-3">
+                                                <span class="badge bg-danger">Bold</span>
+                                                <span class="badge bg-warning text-dark">Traditional</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        @error('design')
+                            <div class="text-danger mt-2">{{ $message }}</div>
+                        @enderror
+                    </div> -->
+
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg px-5">
+                            <i class="bi bi-credit-card-2-front me-2"></i>
+                            Generate ID Cards
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .design-preview:hover {
+        background-color: #f8f9fa;
+        transform: scale(1.02);
+    }
+    .btn-check:checked + label .design-preview {
+        background-color: #e7f3ff;
+        border-color: #0d6efd !important;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+
+    .custom-upload-preview {
+        position: relative;
+        width: 220px;
+        height: 348px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .custom-upload-preview__bg {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .custom-upload-preview__content {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.95) 80%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 80px 14px 18px;
+        text-align: center;
+    }
+
+    .custom-upload-preview__content .preview-photo {
+        width: 90px;
+        height: 110px;
+        border-radius: 8px;
+        background: #dcdcdc;
+        margin-bottom: 12px;
+    }
+
+    .custom-upload-preview__content h6 {
+        font-weight: 700;
+        margin: 0;
+        color: #c62828;
+    }
+
+    .custom-upload-preview__content .preview-info {
+        font-size: 12px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 4px;
+    }
+
+    .custom-upload-preview__content .preview-info span {
+        font-weight: 600;
+    }
+</style>
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const classesByUser = @json($classesByUser ?? []);
+        const userSelect = document.getElementById('user_id');
+        const classSelect = document.getElementById('class');
+        let preservedClass = @json(old('class'));
+        const customInput = document.getElementById('custom_design');
+        const previewBtn = document.getElementById('previewCustom');
+        const previewWrapper = document.getElementById('customPreviewWrapper');
+        const previewImg = document.getElementById('customPreview');
+
+        const renderDefaultOption = () => {
+            const option = document.createElement('option');
+            option.value = '';
+            option.textContent = '-- সকল ক্লাস --';
+            classSelect.appendChild(option);
+        };
+
+        const populateClasses = (userId) => {
+            classSelect.innerHTML = '';
+            renderDefaultOption();
+
+            const classes = classesByUser[userId] || [];
+
+            if (!userId || classes.length === 0) {
+                classSelect.disabled = true;
+                return;
+            }
+
+            classes.forEach(cls => {
+                const option = document.createElement('option');
+                option.value = cls;
+                option.textContent = cls;
+                classSelect.appendChild(option);
+            });
+
+            classSelect.disabled = false;
+
+            if (preservedClass && classes.includes(preservedClass)) {
+                classSelect.value = preservedClass;
+            }
+        };
+
+        if (userSelect.value) {
+            populateClasses(userSelect.value);
+        } else {
+            classSelect.disabled = true;
+            classSelect.innerHTML = '';
+            renderDefaultOption();
+        }
+
+        userSelect.addEventListener('change', () => {
+            preservedClass = '';
+            populateClasses(userSelect.value);
+        });
+
+        const showPreview = () => {
+            const file = customInput.files?.[0];
+            if (!file) {
+                previewWrapper.classList.add('d-none');
+                previewImg.src = '';
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = e => {
+                previewImg.src = e.target?.result ?? '';
+                previewWrapper.classList.remove('d-none');
+            };
+            reader.readAsDataURL(file);
+        };
+
+        customInput?.addEventListener('change', showPreview);
+        previewBtn?.addEventListener('click', showPreview);
+    });
+</script>
+@endsection

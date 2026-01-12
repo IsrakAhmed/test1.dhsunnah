@@ -44,10 +44,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label for="section" class="form-label fw-bold">Section</label>
-                                <select class="form-select" id="section" name="section" required>
-                                    <option value="A">A</option>
-                                    <option value="B">B</option>
-                                </select>
+                                <input type="text" class="form-control" id="section" name="section" required>
                             </div>
                             <div class="col-md-4">
                                 <label for="roll_no" class="form-label fw-bold">Roll No.</label>

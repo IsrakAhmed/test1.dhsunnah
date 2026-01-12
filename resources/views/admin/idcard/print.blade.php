@@ -115,7 +115,7 @@
 
                 <div class="info">
                     <div class="row"><span class="label">Father:</span>{{ $student->father_name }}</div>
-                    <div class="row"><span class="label">Class:</span>{{ $student->class }}</div>
+                    <div class="row"><span class="label">Class:</span>{{ $student->class }}{{ $student->section ? ' - ' . $student->section : '' }}</div>
                     <div class="row"><span class="label">ID No:</span>{{ $student->registration_no }}</div>
                     <div class="row"><span class="label">Roll:</span>{{ $student->roll_no }}</div>
                     <div class="row"><span class="label">Mobile:</span>{{ $student->mobile_no }}</div>

@@ -16,13 +16,18 @@ class IdCardController extends Controller
     {
         $users = User::where('role', 'user')->get();
 
-        $classesByUser = Student::whereNotNull('class')
-            ->select('user_id', 'class')
+        $dataByUser = Student::whereNotNull('class')
+            ->select('user_id', 'class', 'section')
             ->distinct()
             ->orderBy('class')
+            ->orderBy('section')
             ->get()
             ->groupBy('user_id')
-            ->map(fn(Collection $classes) => $classes->pluck('class')->values())
+            ->map(function(Collection $students) {
+                return $students->groupBy('class')->map(function(Collection $classStudents) {
+                    return $classStudents->pluck('section')->filter()->unique()->values();
+                });
+            })
             ->toArray();
 
         //$sampleStudent = Student::with('user')->latest()->first();
@@ -38,7 +43,7 @@ class IdCardController extends Controller
 
         return view('admin.idcard.index', [
             'users' => $users,
-            'classesByUser' => $classesByUser,
+            'dataByUser' => $dataByUser,
             'sampleStudents' => $sampleStudentsByClass,
         ]);
     }
@@ -54,6 +59,7 @@ class IdCardController extends Controller
                 'max:50',
                 Rule::exists('students', 'class')->where(fn($query) => $query->where('user_id', $request->input('user_id'))),
             ],
+            'section' => 'nullable|string|max:50',
             'design' => 'nullable|in:design1,design2',
             'custom_design' => 'nullable|image|mimes:png|max:5120',
         ]);
@@ -64,6 +70,10 @@ class IdCardController extends Controller
 
         if (!empty($validated['class'])) {
             $studentsQuery->where('class', $validated['class']);
+        }
+
+        if (!empty($validated['section'])) {
+            $studentsQuery->where('section', $validated['section']);
         }
 
         $students = $studentsQuery->get();
@@ -100,12 +110,14 @@ class IdCardController extends Controller
         }
 
         $selectedClass = $validated['class'] ?? null;
+        $selectedSection = $validated['section'] ?? null;
 
         return view('admin.idcard.preview', [
             'user' => $user,
             'students' => $students,
             'design' => $design,
             'selectedClass' => $selectedClass,
+            'selectedSection' => $selectedSection,
             'designLabel' => $designLabel,
             'customBackground' => $customBackground,
         ]);
@@ -116,6 +128,7 @@ class IdCardController extends Controller
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'class' => 'nullable|string',
+            'section' => 'nullable|string',
             'design' => 'required|string',
             'customBackground' => 'nullable|string',
         ]);
@@ -124,6 +137,7 @@ class IdCardController extends Controller
 
         $students = Student::where('user_id', $request->user_id)
             ->when($request->class, fn($q) => $q->where('class', $request->class))
+            ->when($request->section, fn($q) => $q->where('section', $request->section))
             ->get();
 
         $backgroundPath = null;

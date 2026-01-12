@@ -30,15 +30,28 @@
                     </div>
 
                     <!-- Class Selection -->
-                    <div class="mb-4">
-                        <label for="class" class="form-label fw-bold">ক্লাস নির্বাচন করুন (ঐচ্ছিক)</label>
-                        <select name="class" id="class" class="form-select form-select-lg" {{ old('user_id') ? '' : 'disabled' }}>
-                            <option value="">-- সকল ক্লাস --</option>
-                        </select>
-                        <div class="form-text">Leave empty to generate ID cards for all classes of the selected school.</div>
-                        @error('class')
-                        <div class="text-danger mt-1">{{ $message }}</div>
-                        @enderror
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="class" class="form-label fw-bold">ক্লাস নির্বাচন করুন (ঐচ্ছিক)</label>
+                            <select name="class" id="class" class="form-select form-select-lg" {{ old('user_id') ? '' : 'disabled' }}>
+                                <option value="">-- সকল ক্লাস --</option>
+                            </select>
+                            <div class="form-text">Leave empty for all classes.</div>
+                            @error('class')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="section" class="form-label fw-bold">সেকশন নির্বাচন করুন (ঐচ্ছিক)</label>
+                            <select name="section" id="section" class="form-select form-select-lg" disabled>
+                                <option value="">-- সকল সেকশন --</option>
+                            </select>
+                            <div class="form-text">Select a class first to see sections.</div>
+                            @error('section')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
                     <!-- Custom Background Upload -->
@@ -221,31 +234,34 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const classesByUser = @json($classesByUser ?? []);
+        const dataByUser = @json($dataByUser ?? []);
         const userSelect = document.getElementById('user_id');
         const classSelect = document.getElementById('class');
+        const sectionSelect = document.getElementById('section');
         let preservedClass = @json(old('class'));
+        let preservedSection = @json(old('section'));
         const customInput = document.getElementById('custom_design');
         const previewBtn = document.getElementById('previewCustom');
         const previewWrapper = document.getElementById('customPreviewWrapper');
         const previewImg = document.getElementById('customPreview');
 
 
-        const renderDefaultOption = () => {
+        const clearSelect = (select, defaultText) => {
+            select.innerHTML = '';
             const option = document.createElement('option');
             option.value = '';
-            option.textContent = '-- সকল ক্লাস --';
-            classSelect.appendChild(option);
+            option.textContent = defaultText;
+            select.appendChild(option);
+            select.disabled = true;
         };
 
         const populateClasses = (userId) => {
-            classSelect.innerHTML = '';
-            renderDefaultOption();
+            clearSelect(classSelect, '-- সকল ক্লাস --');
+            clearSelect(sectionSelect, '-- সকল সেকশন --');
 
-            const classes = classesByUser[userId] || [];
+            const classes = dataByUser[userId] ? Object.keys(dataByUser[userId]) : [];
 
             if (!userId || classes.length === 0) {
-                classSelect.disabled = true;
                 return;
             }
 
@@ -260,20 +276,49 @@
 
             if (preservedClass && classes.includes(preservedClass)) {
                 classSelect.value = preservedClass;
+                populateSections(userId, preservedClass);
+            }
+        };
+
+        const populateSections = (userId, className) => {
+            clearSelect(sectionSelect, '-- সকল সেকশন --');
+
+            if (!userId || !className) return;
+
+            const sections = dataByUser[userId] && dataByUser[userId][className] ? dataByUser[userId][className] : [];
+
+            if (sections.length === 0) {
+                return;
+            }
+
+            sections.forEach(sec => {
+                const option = document.createElement('option');
+                option.value = sec;
+                option.textContent = sec;
+                sectionSelect.appendChild(option);
+            });
+
+            sectionSelect.disabled = false;
+
+            if (preservedSection && sections.includes(preservedSection)) {
+                sectionSelect.value = preservedSection;
             }
         };
 
         if (userSelect.value) {
             populateClasses(userSelect.value);
-        } else {
-            classSelect.disabled = true;
-            classSelect.innerHTML = '';
-            renderDefaultOption();
         }
 
         userSelect.addEventListener('change', () => {
             preservedClass = '';
+            preservedSection = '';
             populateClasses(userSelect.value);
+        });
+
+        classSelect.addEventListener('change', () => {
+            preservedSection = '';
+            populateSections(userSelect.value, classSelect.value);
+            updatePreview(classSelect.value);
         });
 
         const showPreview = () => {

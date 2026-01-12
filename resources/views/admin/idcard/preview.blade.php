@@ -13,6 +13,7 @@
                         @csrf
                         <input type="hidden" name="user_id" value="{{ $user->id }}">
                         <input type="hidden" name="class" value="{{ $selectedClass }}">
+                        <input type="hidden" name="section" value="{{ $selectedSection }}">
                         <input type="hidden" name="design" value="{{ $design }}">
                         <input type="hidden" name="customBackground" value="{{ $customBackground }}">
 
@@ -28,6 +29,7 @@
             <p class="text-muted">
                 Total Students: {{ $students->count() }} |
                 Class Filter: {{ $selectedClass ?? 'All Classes' }} |
+                Section Filter: {{ $selectedSection ?? 'All Sections' }} |
                 Design: {{ $designLabel }}
             </p>
         </div>

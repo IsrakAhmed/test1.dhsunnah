@@ -141,7 +141,7 @@ class IdCardController extends Controller
             'students' => $students,
             'design' => $request->design,
             'customBackground' => $backgroundPath,
-        ])->setPaper('a4');
+        ])->setPaper([0, 0, 155.9, 246.6], 'portrait');
 
 
         return $pdf->download('id-cards.pdf');

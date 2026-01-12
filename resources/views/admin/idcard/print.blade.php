@@ -6,7 +6,7 @@
 
     <style>
         @page {
-            size: A4;
+            size: 55mm 87mm;
             margin: 0;
         }
 
@@ -16,30 +16,26 @@
             padding: 0;
             background: #ffffff;
             font-family: DejaVu Sans, sans-serif;
+            width: 55mm;
+            height: 87mm;
         }
 
         /* One student = one page */
         .page {
             page-break-after: always;
-            width: 210mm;
-            height: 297mm;
+            width: 55mm;
+            height: 87mm;
             position: relative;
             overflow: hidden;
         }
 
         /* ID Card */
         .id-card {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-
-            width: 55mm;
-            height: 87mm;
+            width: 100%;
+            height: 100%;
 
             /* CRITICAL FIXES */
             overflow: hidden;
-            /* 🔑 stops bleed */
             background-repeat: no-repeat;
             background-position: 0 0;
             background-size: 100% 100%;

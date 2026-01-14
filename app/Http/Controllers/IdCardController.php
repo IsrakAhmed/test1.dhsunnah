@@ -61,7 +61,7 @@ class IdCardController extends Controller
             ],
             'section' => 'nullable|string|max:50',
             'design' => 'nullable|in:design1,design2',
-            'custom_design' => 'nullable|image|mimes:png|max:5120',
+            'custom_design' => 'nullable|image|mimes:png,jpeg,jpg|max:5120',
         ]);
 
         $user = User::findOrFail($validated['user_id']);

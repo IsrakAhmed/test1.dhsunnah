@@ -56,12 +56,12 @@
 
                     <!-- Custom Background Upload -->
                     <div class="mb-4">
-                        <label for="custom_design" class="form-label fw-bold">Custom Background (PNG)</label>
+                        <label for="custom_design" class="form-label fw-bold">Custom Background (PNG/JPG)</label>
                         <div class="input-group">
-                            <input type="file" name="custom_design" id="custom_design" class="form-control" accept="image/png">
+                            <input type="file" name="custom_design" id="custom_design" class="form-control" accept="image/png,image/jpeg,image/jpg">
                             <button class="btn btn-outline-secondary" type="button" id="previewCustom">Preview</button>
                         </div>
-                        <div class="form-text">Upload a 55mm x 87mm PNG, similar to the sample below.</div>
+                        <div class="form-text">Upload a 55mm x 87mm image (PNG, JPG, or JPEG), similar to the sample below.</div>
                         <img src="{{ asset('images/idcard-sample.png') }}" alt="Sample design" class="mt-3 rounded" style="max-width: 250px;">
                         @php
                         $previewStudent = collect($sampleStudents)->first();
@@ -91,7 +91,7 @@
                             <div class="custom-upload-preview">
                                 <img id="customPreview" src="" alt="Custom preview" class="custom-upload-preview__bg">
                                 <div class="custom-upload-preview__content">
-                                    <small>{{ $previewSchool }}</small>
+                                    <small></small>
                                     <div class="preview-photo" style="background-image: url('{{ $previewPhoto }}');"></div>
                                     <h6></h6>
                                     <div class="preview-info"><span>Father:</span> {{ $previewFather }}</div>

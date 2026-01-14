@@ -120,9 +120,16 @@
         }
 
         .label-td {
-            width: 13mm; /* Reduced from 22mm to minimize gap */
+            width: 13mm;
             font-weight: bold;
             white-space: nowrap;
+            text-align: right;
+        }
+
+        .colon-td {
+            width: 2mm;
+            font-weight: bold;
+            text-align: center;
         }
     </style>
 </head>
@@ -167,12 +174,12 @@
 
                 <div class="info">
                     <table class="info-table">
-                        <tr><td class="label-td">Father:</td><td>{{ $student->father_name }}</td></tr>
-                        <tr><td class="label-td">Class:</td><td>{{ $student->class }}{{ $student->section ? ' - ' . $student->section : '' }}</td></tr>
-                        <tr><td class="label-td">ID No:</td><td>{{ $student->registration_no }}</td></tr>
-                        <tr><td class="label-td">Roll:</td><td>{{ $student->roll_no }}</td></tr>
-                        <tr><td class="label-td">Mobile:</td><td>{{ $student->mobile_no }}</td></tr>
-                        <tr><td class="label-td">Blood:</td><td>{{ $student->blood_group }}</td></tr>
+                        <tr><td class="label-td">Father</td><td class="colon-td">:</td><td>{{ $student->father_name }}</td></tr>
+                        <tr><td class="label-td">Class</td><td class="colon-td">:</td><td>{{ $student->class }}{{ $student->section ? ' - ' . $student->section : '' }}</td></tr>
+                        <tr><td class="label-td">ID No</td><td class="colon-td">:</td><td>{{ $student->registration_no }}</td></tr>
+                        <tr><td class="label-td">Roll</td><td class="colon-td">:</td><td>{{ $student->roll_no }}</td></tr>
+                        <tr><td class="label-td">Mobile</td><td class="colon-td">:</td><td>{{ $student->mobile_no }}</td></tr>
+                        <tr><td class="label-td">Blood</td><td class="colon-td">:</td><td>{{ $student->blood_group }}</td></tr>
                     </table>
                 </div>
 

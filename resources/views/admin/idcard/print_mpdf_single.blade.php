@@ -10,27 +10,33 @@
 
         <table style="width: 46mm; margin: 0 auto; border-collapse: collapse; font-size: 8pt;">
             <tr>
-                <td style="width: 14mm; font-weight: bold; padding-bottom: 0.5mm; text-shadow: 0 0 2px white;">Father:</td>
+                <td style="width: 14mm; font-weight: bold; padding-bottom: 0.5mm; text-shadow: 0 0 2px white; text-align: left;">Father</td>
+                <td style="width: 2mm; font-weight: bold; padding-bottom: 0.5mm; text-shadow: 0 0 2px white; text-align: center;">:</td>
                 <td style="padding-bottom: 0.5mm; text-shadow: 0 0 2px white;">{{ $student->father_name }}</td>
             </tr>
             <tr>
-                <td style="width: 14mm; font-weight: bold; padding-bottom: 0.5mm; text-shadow: 0 0 2px white;">Class:</td>
+                <td style="width: 14mm; font-weight: bold; padding-bottom: 0.5mm; text-shadow: 0 0 2px white; text-align: left;">Class</td>
+                <td style="width: 2mm; font-weight: bold; padding-bottom: 0.5mm; text-shadow: 0 0 2px white; text-align: center;">:</td>
                 <td style="padding-bottom: 0.5mm; text-shadow: 0 0 2px white;">{{ $student->class }}{{ $student->section ? ' - ' . $student->section : '' }}</td>
             </tr>
             <tr>
-                <td style="width: 14mm; font-weight: bold; padding-bottom: 0.5mm; text-shadow: 0 0 2px white;">ID No:</td>
+                <td style="width: 14mm; font-weight: bold; padding-bottom: 0.5mm; text-shadow: 0 0 2px white; text-align: left;">ID No</td>
+                <td style="width: 2mm; font-weight: bold; padding-bottom: 0.5mm; text-shadow: 0 0 2px white; text-align: center;">:</td>
                 <td style="padding-bottom: 0.5mm; text-shadow: 0 0 2px white;">{{ $student->registration_no }}</td>
             </tr>
             <tr>
-                <td style="width: 14mm; font-weight: bold; padding-bottom: 0.5mm; text-shadow: 0 0 2px white;">Roll:</td>
+                <td style="width: 14mm; font-weight: bold; padding-bottom: 0.5mm; text-shadow: 0 0 2px white; text-align: left;">Roll</td>
+                <td style="width: 2mm; font-weight: bold; padding-bottom: 0.5mm; text-shadow: 0 0 2px white; text-align: center;">:</td>
                 <td style="padding-bottom: 0.5mm; text-shadow: 0 0 2px white;">{{ $student->roll_no }}</td>
             </tr>
             <tr>
-                <td style="width: 14mm; font-weight: bold; padding-bottom: 0.5mm; text-shadow: 0 0 2px white;">Mobile:</td>
+                <td style="width: 14mm; font-weight: bold; padding-bottom: 0.5mm; text-shadow: 0 0 2px white; text-align: left;">Mobile</td>
+                <td style="width: 2mm; font-weight: bold; padding-bottom: 0.5mm; text-shadow: 0 0 2px white; text-align: center;">:</td>
                 <td style="padding-bottom: 0.5mm; text-shadow: 0 0 2px white;">{{ $student->mobile_no }}</td>
             </tr>
             <tr>
-                <td style="width: 14mm; font-weight: bold; text-shadow: 0 0 2px white;">Blood:</td>
+                <td style="width: 14mm; font-weight: bold; text-shadow: 0 0 2px white; text-align: left;">Blood</td>
+                <td style="width: 2mm; font-weight: bold; text-shadow: 0 0 2px white; text-align: center;">:</td>
                 <td style="text-shadow: 0 0 2px white;">{{ $student->blood_group }}</td>
             </tr>
         </table>

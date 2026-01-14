@@ -104,10 +104,13 @@
             width: 14mm;
             font-weight: bold;
             white-space: nowrap;
+            text-align: right;
         }
 
-        .value-td {
-            text-align: left;
+        .colon-td {
+            width: 2mm;
+            font-weight: bold;
+            text-align: center;
         }
     </style>
 </head>
@@ -148,28 +151,34 @@
             <div class="info">
                 <table class="info-table">
                     <tr>
-                        <td class="label-td">Father:</td>
-                        <td class="value-td">{{ $student->father_name }}</td>
+                        <td class="label-td">Father</td>
+                        <td class="colon-td">:</td>
+                        <td>{{ $student->father_name }}</td>
                     </tr>
                     <tr>
-                        <td class="label-td">Class:</td>
-                        <td class="value-td">{{ $student->class }}{{ $student->section ? ' - ' . $student->section : '' }}</td>
+                        <td class="label-td">Class</td>
+                        <td class="colon-td">:</td>
+                        <td>{{ $student->class }}{{ $student->section ? ' - ' . $student->section : '' }}</td>
                     </tr>
                     <tr>
-                        <td class="label-td">ID No:</td>
-                        <td class="value-td">{{ $student->registration_no }}</td>
+                        <td class="label-td">ID No</td>
+                        <td class="colon-td">:</td>
+                        <td>{{ $student->registration_no }}</td>
                     </tr>
                     <tr>
-                        <td class="label-td">Roll:</td>
-                        <td class="value-td">{{ $student->roll_no }}</td>
+                        <td class="label-td">Roll</td>
+                        <td class="colon-td">:</td>
+                        <td>{{ $student->roll_no }}</td>
                     </tr>
                     <tr>
-                        <td class="label-td">Mobile:</td>
-                        <td class="value-td">{{ $student->mobile_no }}</td>
+                        <td class="label-td">Mobile</td>
+                        <td class="colon-td">:</td>
+                        <td>{{ $student->mobile_no }}</td>
                     </tr>
                     <tr>
-                        <td class="label-td">Blood:</td>
-                        <td class="value-td">{{ $student->blood_group }}</td>
+                        <td class="label-td">Blood</td>
+                        <td class="colon-td">:</td>
+                        <td>{{ $student->blood_group }}</td>
                     </tr>
                 </table>
             </div>

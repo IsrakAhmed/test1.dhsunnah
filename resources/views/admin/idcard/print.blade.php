@@ -2,9 +2,29 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    @php
+    // Try Nikosh first (better Bangla support), fallback to SolaimanLipi
+    $fontPath = storage_path('fonts/Nikosh.ttf');
+    if (!file_exists($fontPath)) {
+        $fontPath = storage_path('fonts/SolaimanLipi.ttf');
+    }
+    
+    $fontData = '';
+    if (file_exists($fontPath)) {
+        $fontData = base64_encode(file_get_contents($fontPath));
+    }
+    @endphp
 
     <style>
+        @font-face {
+            font-family: 'bangla';
+            font-style: normal;
+            font-weight: normal;
+            src: url(data:font/truetype;charset=utf-8;base64,{{ $fontData }}) format('truetype');
+        }
+
         @page {
             size: 55mm 87mm;
             margin: 0;
@@ -15,7 +35,7 @@
             margin: 0;
             padding: 0;
             background: #ffffff;
-            font-family: DejaVu Sans, sans-serif;
+            font-family: 'bangla', 'Nikosh', 'SolaimanLipi', DejaVu Sans, sans-serif;
             width: 55mm;
             height: 87mm;
         }
@@ -137,7 +157,7 @@
 
             <div class="content">
 
-                <div class="school">{{ $user->name }}</div>
+                <div class="school"></div>
 
                 <div class="photo">
                     <img src="{{ $photoSrc }}" style="width: 100%; height: 100%; object-fit: cover;">

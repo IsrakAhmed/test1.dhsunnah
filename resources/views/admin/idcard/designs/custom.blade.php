@@ -12,7 +12,7 @@ $background = $customBackground ?? '';
 
     <div class="id-card custom-card-alt" style="background-image: url('{{ $customBackground }}'); background-size: cover; background-position: center;">
         <div class="custom-content">
-            <small class="school-name-top">{{ $user->name }}</small>
+            <small class="school-name-top"></small>
 
             @php
             $photoName = $student->name ?? 'Student';

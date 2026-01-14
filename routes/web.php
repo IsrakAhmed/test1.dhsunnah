@@ -14,6 +14,114 @@ Route::get('/user/login', [AuthController::class, 'userLogin'])->name('user.logi
 Route::post('/user/login', [AuthController::class, 'userAuthenticate']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Temp route to register fonts
+Route::get('/register-fonts', function() {
+    try {
+        $fontDir = storage_path('fonts');
+        if (!file_exists($fontDir)) {
+            mkdir($fontDir, 0755, true);
+        }
+
+        // 1. Prepare source (Download Nikosh if missing)
+        $fontFile = 'Nikosh.ttf';
+        $localFontFile = $fontDir . '/' . $fontFile; 
+        
+        if (!file_exists($localFontFile)) {
+            // Attempt to download from a reliable source
+            $url = 'https://raw.githubusercontent.com/itcon-bd/bangla-fonts/master/Nikosh.ttf';
+            $content = @file_get_contents($url);
+            if ($content) {
+                file_put_contents($localFontFile, $content);
+            } else {
+                // Fallback to SolaimanLipi if download fails and it exists
+                $solaiman = public_path('fonts/SolaimanLipi.ttf');
+                if (file_exists($solaiman)) {
+                    copy($solaiman, $localFontFile);
+                    $fontFile = 'SolaimanLipi.ttf';
+                    return "Nikosh download failed. Using SolaimanLipi fallback. Please try again.";
+                }
+                return "Failed to download Nikosh and no fallback found.";
+            }
+        }
+
+        // 2. Register
+        $options = new \Dompdf\Options();
+        $options->set('fontDir', $fontDir);
+        $options->set('fontCache', $fontDir);
+        $options->set('isRemoteEnabled', true);
+        
+        $dompdf = new \Dompdf\Dompdf($options);
+        $metrics = $dompdf->getFontMetrics();
+        
+        // Register family name as 'nikosh'
+        $metrics->registerFont(
+            ['family' => 'nikosh', 'style' => 'normal', 'weight' => 'normal'],
+            $localFontFile
+        );
+
+        // 3. Look for the metrics file
+        $files = scandir($fontDir);
+        $foundUfm = null;
+        foreach ($files as $file) {
+            if (strpos($file, 'nikosh_normal_') === 0 && strpos($file, '.ufm') !== false) {
+                $foundUfm = $fontDir . '/' . str_replace('.ufm', '', $file);
+                break;
+            }
+        }
+
+        if (!$foundUfm) {
+            return "Failed to generate metrics files. Files: <pre>" . print_r($files, true) . "</pre>";
+        }
+
+        // 4. Update cache with Nikosh as the master font
+        $fontData = [
+            'nikosh' => [
+                'normal' => $foundUfm,
+                'bold' => $foundUfm,
+                'italic' => $foundUfm,
+                'bold_italic' => $foundUfm,
+            ],
+            'solaimanlipi' => [
+                'normal' => $foundUfm,
+                'bold' => $foundUfm,
+                'italic' => $foundUfm,
+                'bold_italic' => $foundUfm,
+            ],
+            'sans-serif' => [
+                'normal' => $foundUfm,
+                'bold' => $foundUfm,
+                'italic' => $foundUfm,
+                'bold_italic' => $foundUfm,
+            ],
+            'serif' => [
+                'normal' => $foundUfm,
+                'bold' => $foundUfm,
+                'italic' => $foundUfm,
+                'bold_italic' => $foundUfm,
+            ]
+        ];
+
+        file_put_contents(
+            $fontDir . '/dompdf_font_family_cache.php', 
+            "<?php return " . var_export($fontData, true) . ";"
+        );
+
+        return "Success! Nikosh font registered and set as default. <br>Path: $foundUfm";
+
+    } catch (\Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+});
+
+Route::get('/inspect-fonts', function() {
+    $fontDir = storage_path('fonts');
+    $cacheFile = $fontDir . '/dompdf_font_family_cache.php';
+    if (file_exists($cacheFile)) {
+        return "<h3>Cache Content:</h3><pre>" . htmlspecialchars(file_get_contents($cacheFile)) . "</pre>";
+    }
+    return "Cache file not found at $cacheFile";
+});
+
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\IdCardController;

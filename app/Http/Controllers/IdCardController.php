@@ -6,9 +6,9 @@ use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\Snappy\Facades\SnappyPdf;
 
 class IdCardController extends Controller
 {
@@ -101,7 +101,7 @@ class IdCardController extends Controller
             \Log::info('Custom background uploaded', [
                 'path' => $customBackgroundPath,
                 'url' => $customBackground, // Now Base64
-                'file_exists' => Storage::disk('public')->exists($customBackgroundPath)
+                'file_exists' => file_exists($fullPath)
             ]);
         }
 
@@ -160,11 +160,9 @@ class IdCardController extends Controller
                 $backgroundPath = 'data:image/' . $type . ';base64,' . base64_encode($data);
              }
         } elseif ($request->customBackground) {
-            // Use the relative path to get the filesystem path
             $relativePath = str_replace(asset('storage/'), '', $request->customBackground);
             $fullPath = storage_path('app/public/' . $relativePath);
 
-            // Fallback: try public_path if storage_path doesn't work or file missing
             if (!file_exists($fullPath)) {
                 $permissionPath = public_path(str_replace(asset(''), '', $request->customBackground));
                 if (file_exists($permissionPath)) {
@@ -179,22 +177,135 @@ class IdCardController extends Controller
             }
         }
 
-        $pdf = Pdf::loadView('admin.idcard.print', [
+        // Configure mPDF
+        $mpdf = new \Mpdf\Mpdf([
+            'mode' => 'utf-8',
+            'format' => [55, 87],
+            'margin_left' => 0,
+            'margin_right' => 0,
+            'margin_top' => 0,
+            'margin_bottom' => 0,
+            'margin_header' => 0,
+            'margin_footer' => 0,
+            'orientation' => 'P',
+            'tempDir' => storage_path('app/temp'),
+            'fontDir' => [storage_path('fonts')],
+            'fontdata' => [
+                'nikosh' => [
+                    'R' => 'Nikosh.ttf',
+                    'useOTL' => 0xFF,
+                    'useKashida' => 75,
+                ],
+            ],
+            'default_font' => 'nikosh',
+            'autoScriptToLang' => true,
+            'autoLangToFont' => true,
+        ]);
+
+        // Process each student
+        foreach ($students as $index => $student) {
+            if ($index > 0) {
+                $mpdf->AddPage();
+            }
+
+            // Set background image for this page using HTML header with proper positioning
+            if ($backgroundPath) {
+                $headerHtml = '<div style="position: absolute; top: 0; left: 0; width: 55mm; height: 87mm; overflow: hidden;">
+                    <img src="' . $backgroundPath . '" style="width: 55mm; height: 87mm; display: block;" />
+                </div>';
+                $mpdf->SetHTMLHeader($headerHtml);
+                $mpdf->SetHTMLFooter(''); // Clear footer to prevent overlap
+            }
+
+            // Prepare student photo
+            $photoSrc = 'https://ui-avatars.com/api/?name=' . urlencode($student->name);
+            if ($student->image) {
+                $path = storage_path('app/public/' . $student->image);
+                if (!file_exists($path)) {
+                    $path = public_path('storage/' . $student->image);
+                }
+                if (file_exists($path)) {
+                    $type = pathinfo($path, PATHINFO_EXTENSION);
+                    $data = file_get_contents($path);
+                    $photoSrc = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                }
+            }
+
+            // Render content for this student with relative positioning
+            $html = view('admin.idcard.print_mpdf_single', [
+                'student' => $student,
+                'photoSrc' => $photoSrc,
+            ])->render();
+
+            $mpdf->WriteHTML($html);
+        }
+
+        return $mpdf->Output('id-cards.pdf', 'D');
+    }
+
+    public function printBrowsershot(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'class' => 'nullable|string',
+            'section' => 'nullable|string',
+            'design' => 'required|string',
+            'customBackground' => 'nullable|string',
+            'customBackgroundPath' => 'nullable|string',
+        ]);
+
+        $user = User::findOrFail($request->user_id);
+
+        $students = Student::where('user_id', $request->user_id)
+            ->when($request->class, fn($q) => $q->where('class', $request->class))
+            ->when($request->section, fn($q) => $q->where('section', $request->section))
+            ->get();
+
+        $backgroundPath = null;
+        if ($request->customBackgroundPath) {
+             $fullPath = storage_path('app/public/' . $request->customBackgroundPath);
+             
+             if (file_exists($fullPath)) {
+                $type = pathinfo($fullPath, PATHINFO_EXTENSION);
+                $data = file_get_contents($fullPath);
+                $backgroundPath = 'data:image/' . $type . ';base64,' . base64_encode($data);
+             }
+        } elseif ($request->customBackground) {
+            $relativePath = str_replace(asset('storage/'), '', $request->customBackground);
+            $fullPath = storage_path('app/public/' . $relativePath);
+
+            if (!file_exists($fullPath)) {
+                $permissionPath = public_path(str_replace(asset(''), '', $request->customBackground));
+                if (file_exists($permissionPath)) {
+                    $fullPath = $permissionPath;
+                }
+            }
+
+            if (file_exists($fullPath)) {
+                $type = pathinfo($fullPath, PATHINFO_EXTENSION);
+                $data = file_get_contents($fullPath);
+                $backgroundPath = 'data:image/' . $type . ';base64,' . base64_encode($data);
+            }
+        }
+
+        // Render the view to HTML
+        $html = view('admin.idcard.print_browsershot', [
             'user' => $user,
             'students' => $students,
             'design' => $request->design,
             'customBackground' => $backgroundPath,
-        ])
-        ->setPaper([0, 0, 155.91, 246.61], 'portrait') // 55mm x 87mm
-        ->setOptions([
-            'isHtml5ParserEnabled' => true,
-            'isRemoteEnabled' => true,
-            'dpi' => 300,
-            'defaultPaperSize' => 'a4',
-            'defaultFont' => 'sans-serif',
-        ]);
+        ])->render();
 
-
-        return $pdf->download('id-cards.pdf');
+        // Generate PDF using Snappy (wkhtmltopdf)
+        return SnappyPdf::loadHTML($html)
+            ->setOption('page-width', '55mm')
+            ->setOption('page-height', '87mm')
+            ->setOption('margin-top', 0)
+            ->setOption('margin-right', 0)
+            ->setOption('margin-bottom', 0)
+            ->setOption('margin-left', 0)
+            ->setOption('enable-local-file-access', true)
+            ->setOption('encoding', 'UTF-8')
+            ->download('id-cards.pdf');
     }
 }

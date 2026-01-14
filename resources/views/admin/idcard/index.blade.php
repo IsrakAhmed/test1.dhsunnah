@@ -93,7 +93,7 @@
                                 <div class="custom-upload-preview__content">
                                     <small>{{ $previewSchool }}</small>
                                     <div class="preview-photo" style="background-image: url('{{ $previewPhoto }}');"></div>
-                                    <h6>{{ $previewName }}</h6>
+                                    <h6></h6>
                                     <div class="preview-info"><span>Father:</span> {{ $previewFather }}</div>
                                     <div class="preview-info"><span>Class:</span> {{ $previewClass }}</div>
                                     <div class="preview-info"><span>ID No:</span> {{ $previewId }}</div>

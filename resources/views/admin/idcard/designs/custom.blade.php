@@ -10,7 +10,7 @@ $background = $customBackground ?? '';
     // \Log::info('Rendering custom card', ['background' => $bgUrl]);
     @endphp
 
-    <div class="id-card custom-card-alt" style="background-image: url({{ json_encode($customBackground) }}); background-size: cover; background-position: center;">
+    <div class="id-card custom-card-alt" style="background-image: url('{{ $customBackground }}'); background-size: cover; background-position: center;">
         <div class="custom-content">
             <small class="school-name-top">{{ $user->name }}</small>
 

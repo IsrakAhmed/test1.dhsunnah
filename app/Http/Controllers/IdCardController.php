@@ -89,10 +89,18 @@ class IdCardController extends Controller
             // Generate the full URL
             $customBackground = asset('storage/' . $customBackgroundPath);
 
+            // Generate Base64 for reliable preview
+            $fullPath = storage_path('app/public/' . $customBackgroundPath);
+             if (file_exists($fullPath)) {
+                $type = pathinfo($fullPath, PATHINFO_EXTENSION);
+                $data = file_get_contents($fullPath);
+                $customBackground = 'data:image/' . $type . ';base64,' . base64_encode($data);
+             }
+
             // Log for debugging
             \Log::info('Custom background uploaded', [
                 'path' => $customBackgroundPath,
-                'url' => $customBackground,
+                'url' => $customBackground, // Now Base64
                 'file_exists' => Storage::disk('public')->exists($customBackgroundPath)
             ]);
         }
@@ -120,6 +128,7 @@ class IdCardController extends Controller
             'selectedSection' => $selectedSection,
             'designLabel' => $designLabel,
             'customBackground' => $customBackground,
+            'customBackgroundPath' => $customBackgroundPath,
         ]);
     }
 
@@ -131,6 +140,7 @@ class IdCardController extends Controller
             'section' => 'nullable|string',
             'design' => 'required|string',
             'customBackground' => 'nullable|string',
+            'customBackgroundPath' => 'nullable|string',
         ]);
 
         $user = User::findOrFail($request->user_id);
@@ -141,7 +151,15 @@ class IdCardController extends Controller
             ->get();
 
         $backgroundPath = null;
-        if ($request->customBackground) {
+        if ($request->customBackgroundPath) {
+             $fullPath = storage_path('app/public/' . $request->customBackgroundPath);
+             
+             if (file_exists($fullPath)) {
+                $type = pathinfo($fullPath, PATHINFO_EXTENSION);
+                $data = file_get_contents($fullPath);
+                $backgroundPath = 'data:image/' . $type . ';base64,' . base64_encode($data);
+             }
+        } elseif ($request->customBackground) {
             // Use the relative path to get the filesystem path
             $relativePath = str_replace(asset('storage/'), '', $request->customBackground);
             $fullPath = storage_path('app/public/' . $relativePath);

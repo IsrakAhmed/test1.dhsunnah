@@ -16,6 +16,7 @@
                         <input type="hidden" name="section" value="{{ $selectedSection }}">
                         <input type="hidden" name="design" value="{{ $design }}">
                         <input type="hidden" name="customBackground" value="{{ $customBackground }}">
+                        <input type="hidden" name="customBackgroundPath" value="{{ $customBackgroundPath ?? '' }}">
 
                         <button type="submit" class="btn btn-success">
                             <i class="bi bi-file-earmark-pdf"></i> Download PDF

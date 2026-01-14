@@ -29,32 +29,38 @@
             overflow: hidden;
         }
 
-        /* ID Card */
+        /* Background Image (Absolute Positioned) */
+        .bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            /* Behind content */
+        }
+
+        /* ID Card Container */
         .id-card {
             width: 100%;
             height: 100%;
-
-            /* CRITICAL FIXES */
-            overflow: hidden;
-            background-repeat: no-repeat;
-            background-position: 0 0;
-            background-size: 100% 100%;
-
-            background-image: url('{{ $customBackground }}');
-
+            position: relative;
             box-sizing: border-box;
         }
 
         .content {
             position: absolute;
-            inset: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             text-align: center;
-            overflow: hidden;
         }
 
         .school {
             margin-top: 6mm;
-            font-size: 9px;
+            font-size: 6.75pt;
+            /* 9px -> 6.75pt */
             font-weight: bold;
         }
 
@@ -62,34 +68,41 @@
             width: 23mm;
             height: 28mm;
             margin: 10mm auto 2mm;
-            border: 1px solid #000;
-            background-size: cover;
-            background-position: center;
+            border: 0.75pt solid #000;
+            overflow: hidden; /* Ensure image stays within border */
         }
 
         .name {
-            font-size: 11px;
+            font-size: 8.25pt;
+            /* 11px -> 8.25pt */
             font-weight: bold;
             margin-bottom: 2mm;
         }
 
         .info {
-            font-size: 8px;
+            font-size: 6pt;
+            /* 8px -> 6pt */
             text-align: left;
             padding: 0 6mm;
         }
 
-        .row {
-            display: flex;
-            align-items: flex-start;
-            /* ⬅ keeps text aligned at top */
-            margin-bottom: 1mm;
+        /* Use Table for reliable layout in PDF */
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        .label {
-            width: 22mm;
+        .info-table td {
+            vertical-align: top;
+            padding: 0;
+            padding-bottom: 1pt; /* Tighter spacing */
+            line-height: 1.2;
+        }
+
+        .label-td {
+            width: 13mm; /* Reduced from 22mm to minimize gap */
             font-weight: bold;
-            flex-shrink: 0;
+            white-space: nowrap;
         }
     </style>
 </head>
@@ -98,28 +111,49 @@
 
     @foreach ($students as $student)
     @php
-    $photo = $student->image
-    ? public_path('storage/' . $student->image)
-    : 'https://ui-avatars.com/api/?name=' . urlencode($student->name);
+        $photoSrc = 'https://ui-avatars.com/api/?name=' . urlencode($student->name);
+        
+        if ($student->image) {
+            $path = storage_path('app/public/' . $student->image);
+            
+            // Try public_path if storage_path fails (fallback)
+            if (!file_exists($path)) {
+                $path = public_path('storage/' . $student->image);
+            }
+
+            if (file_exists($path)) {
+                $type = pathinfo($path, PATHINFO_EXTENSION);
+                $data = file_get_contents($path);
+                $photoSrc = 'data:image/' . $type . ';base64,' . base64_encode($data);
+            }
+        }
     @endphp
 
     <div class="page">
         <div class="id-card">
+            @if($customBackground)
+            <img src="{{ $customBackground }}" class="bg-image">
+            @endif
+
             <div class="content">
 
                 <div class="school">{{ $user->name }}</div>
 
-                <div class="photo" style="background-image:url('{{ $photo }}')"></div>
+                <div class="photo">
+                    <img src="{{ $photoSrc }}" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
 
                 <div class="name">{{ $student->name }}</div>
 
                 <div class="info">
-                    <div class="row"><span class="label">Father:</span>{{ $student->father_name }}</div>
-                    <div class="row"><span class="label">Class:</span>{{ $student->class }}{{ $student->section ? ' - ' . $student->section : '' }}</div>
-                    <div class="row"><span class="label">ID No:</span>{{ $student->registration_no }}</div>
-                    <div class="row"><span class="label">Roll:</span>{{ $student->roll_no }}</div>
-                    <div class="row"><span class="label">Mobile:</span>{{ $student->mobile_no }}</div>
-                    <div class="row"><span class="label">Blood:</span>{{ $student->blood_group }}</div>
+                    <table class="info-table">
+                        <tr><td class="label-td">Father:</td><td>{{ $student->father_name }}</td></tr>
+                        <tr><td class="label-td">Class:</td><td>{{ $student->class }}{{ $student->section ? ' - ' . $student->section : '' }}</td></tr>
+                        <tr><td class="label-td">ID No:</td><td>{{ $student->registration_no }}</td></tr>
+                        <tr><td class="label-td">Roll:</td><td>{{ $student->roll_no }}</td></tr>
+                        <tr><td class="label-td">Mobile:</td><td>{{ $student->mobile_no }}</td></tr>
+                        <tr><td class="label-td">Blood:</td><td>{{ $student->blood_group }}</td></tr>
+                    </table>
                 </div>
 
             </div>

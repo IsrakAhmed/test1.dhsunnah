@@ -141,21 +141,40 @@ class IdCardController extends Controller
             ->get();
 
         $backgroundPath = null;
-
         if ($request->customBackground) {
-            // Convert full URL to public path
-            $backgroundPath = public_path(
-                str_replace(asset(''), '', $request->customBackground)
-            );
-        }
+            // Use the relative path to get the filesystem path
+            $relativePath = str_replace(asset('storage/'), '', $request->customBackground);
+            $fullPath = storage_path('app/public/' . $relativePath);
 
+            // Fallback: try public_path if storage_path doesn't work or file missing
+            if (!file_exists($fullPath)) {
+                $permissionPath = public_path(str_replace(asset(''), '', $request->customBackground));
+                if (file_exists($permissionPath)) {
+                    $fullPath = $permissionPath;
+                }
+            }
+
+            if (file_exists($fullPath)) {
+                $type = pathinfo($fullPath, PATHINFO_EXTENSION);
+                $data = file_get_contents($fullPath);
+                $backgroundPath = 'data:image/' . $type . ';base64,' . base64_encode($data);
+            }
+        }
 
         $pdf = Pdf::loadView('admin.idcard.print', [
             'user' => $user,
             'students' => $students,
             'design' => $request->design,
             'customBackground' => $backgroundPath,
-        ])->setPaper([0, 0, 155.9, 246.6], 'portrait');
+        ])
+        ->setPaper([0, 0, 155.91, 246.61], 'portrait') // 55mm x 87mm
+        ->setOptions([
+            'isHtml5ParserEnabled' => true,
+            'isRemoteEnabled' => true,
+            'dpi' => 300,
+            'defaultPaperSize' => 'a4',
+            'defaultFont' => 'sans-serif',
+        ]);
 
 
         return $pdf->download('id-cards.pdf');

@@ -32,28 +32,34 @@ $background = $customBackground ?? '';
             <h6 class="student-name-custom">{{ $student->name ?? 'Student Name' }}</h6>
 
             <div class="info-item">
-                <span class="label-custom">Father:</span>
-                <span>{{ $student->father_name ?? 'N/A' }}</span>
+                <span class="label-custom">Father</span>
+                <span style="font-weight: bold; display: inline-block; margin-left: -6px; margin-right: 9px;">:</span>
+                <span class="value-custom">{{ $student->father_name ?? 'N/A' }}</span>
             </div>
             <div class="info-item">
-                <span class="label-custom">Class:</span>
-                <span>{{ $displayClass }}</span>
+                <span class="label-custom">Class</span>
+                <span style="font-weight: bold; display: inline-block; margin-left: -6px; margin-right: 9px;">:</span>
+                <span class="value-custom">{{ $displayClass }}</span>
             </div>
             <div class="info-item">
-                <span class="label-custom">ID No:</span>
-                <span>{{ $student->registration_no ?? 'N/A' }}</span>
+                <span class="label-custom">ID No</span>
+                <span style="font-weight: bold; display: inline-block; margin-left: -6px; margin-right: 9px;">:</span>
+                <span class="value-custom">{{ $student->registration_no ?? 'N/A' }}</span>
             </div>
             <div class="info-item">
-                <span class="label-custom">Roll:</span>
-                <span>{{ $student->roll_no ?? 'N/A' }}</span>
+                <span class="label-custom">Roll</span>
+                <span style="font-weight: bold; display: inline-block; margin-left: -6px; margin-right: 9px;">:</span>
+                <span class="value-custom">{{ $student->roll_no ?? 'N/A' }}</span>
             </div>
             <div class="info-item">
-                <span class="label-custom">Mobile:</span>
-                <span>{{ $student->mobile_no ?? 'N/A' }}</span>
+                <span class="label-custom">Mobile</span>
+                <span style="font-weight: bold; display: inline-block; margin-left: -6px; margin-right: 9px;">:</span>
+                <span class="value-custom">{{ $student->mobile_no ?? 'N/A' }}</span>
             </div>
             <div class="info-item">
-                <span class="label-custom">Blood:</span>
-                <span>{{ $student->blood_group ?? 'N/A' }}</span>
+                <span class="label-custom">Blood</span>
+                <span style="font-weight: bold; display: inline-block; margin-left: -6px; margin-right: 9px;">:</span>
+                <span class="value-custom">{{ $student->blood_group ?? 'N/A' }}</span>
             </div>
 
         </div>

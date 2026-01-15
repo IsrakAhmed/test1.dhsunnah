@@ -4,7 +4,7 @@
             <img src="{{ $photoSrc }}" style="width: 23mm; height: 28mm; display: block;" />
         </div>
 
-        <div style="font-size: 11pt; font-weight: bold; margin-bottom: 2mm; color: #c41e3a; text-shadow: 0 0 3px white, 0 0 6px white;">
+        <div style="font-size: 11pt; margin-bottom: 2mm; color: #c41e3a; text-shadow: 0 0 3px white, 0 0 6px white;">
             {{ $student->name }}
         </div>
 

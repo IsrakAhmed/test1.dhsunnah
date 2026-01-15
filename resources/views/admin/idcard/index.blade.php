@@ -73,7 +73,6 @@
                         : 'https://ui-avatars.com/api/?name=' . urlencode($previewPhotoName) . '&background=cccccc&color=222';
 
                         $previewName = $previewStudent['name'] ?? 'Student Name';
-                        $previewSchool = $previewStudent['user']['name'] ?? 'School Name';
 
                         $classValue = $previewStudent['class'] ?? 'Class';
                         $sectionValue = $previewStudent['section'] ?? null;
@@ -364,9 +363,6 @@
 
         document.querySelector('.custom-upload-preview__content h6').innerText =
             student.name ?? 'Student Name';
-
-        document.querySelector('.custom-upload-preview__content small').innerText =
-            student.user?.name ?? 'School Name';
 
         const infoRows = document.querySelectorAll('.preview-info');
 

@@ -93,12 +93,12 @@
                                     <small></small>
                                     <div class="preview-photo" style="background-image: url('{{ $previewPhoto }}');"></div>
                                     <h6></h6>
-                                    <div class="preview-info"><span>Father:</span> {{ $previewFather }}</div>
-                                    <div class="preview-info"><span>Class:</span> {{ $previewClass }}</div>
-                                    <div class="preview-info"><span>ID No:</span> {{ $previewId }}</div>
-                                    <div class="preview-info"><span>Roll:</span> {{ $previewRoll }}</div>
-                                    <div class="preview-info"><span>Mobile:</span> {{ $previewMobile }}</div>
-                                    <div class="preview-info"><span>Blood:</span> {{ $previewBlood }}</div>
+                                    <div class="preview-info"><span>Father</span><span class="colon">:</span><span class="value">{{ $previewFather }}</span></div>
+                                    <div class="preview-info"><span>Class</span><span class="colon">:</span><span class="value">{{ $previewClass }}</span></div>
+                                    <div class="preview-info"><span>ID No</span><span class="colon">:</span><span class="value">{{ $previewId }}</span></div>
+                                    <div class="preview-info"><span>Roll</span><span class="colon">:</span><span class="value">{{ $previewRoll }}</span></div>
+                                    <div class="preview-info"><span>Mobile</span><span class="colon">:</span><span class="value">{{ $previewMobile }}</span></div>
+                                    <div class="preview-info"><span>Blood</span><span class="colon">:</span><span class="value">{{ $previewBlood }}</span></div>
                                 </div>
                             </div>
                         </div>
@@ -202,7 +202,7 @@
         width: 175px;
         display: flex;
         justify-content: flex-start;
-        gap: 10px;
+        gap: 0;
         margin-top: 1px;
         padding: 1px 0;
         color: #1a1a1a;
@@ -211,10 +211,26 @@
         line-height: 1.2;
     }
 
-    .custom-upload-preview__content .preview-info span {
+    .custom-upload-preview__content .preview-info span:first-child {
         font-weight: 700;
         color: #000;
         min-width: 50px;
+        text-align: left;
+    }
+
+    .custom-upload-preview__content .preview-info .colon {
+        font-weight: 700;
+        color: #000;
+        width: 8px;
+        margin-left: -13px;
+        margin-right: 11px;
+    }
+
+    .custom-upload-preview__content .preview-info .value {
+        font-weight: 500;
+        flex: 1;
+        text-align: left;
+        margin-left: -1px;
     }
 
     .custom-upload-preview__signature {
@@ -366,13 +382,13 @@
 
         const infoRows = document.querySelectorAll('.preview-info');
 
-        infoRows[0].lastChild.textContent = student.father_name ?? 'Father Name';
-        infoRows[1].lastChild.textContent =
+        infoRows[0].querySelector('.value').textContent = student.father_name ?? 'Father Name';
+        infoRows[1].querySelector('.value').textContent =
             student.class + (student.section ? ' - ' + student.section : '');
-        infoRows[2].lastChild.textContent = student.registration_no ?? 'ID0000';
-        infoRows[3].lastChild.textContent = student.roll_no ?? 'Roll';
-        infoRows[4].lastChild.textContent = student.mobile_no ?? '01XXXXXXXXX';
-        infoRows[5].lastChild.textContent = student.blood_group ?? 'N/A';
+        infoRows[2].querySelector('.value').textContent = student.registration_no ?? 'ID0000';
+        infoRows[3].querySelector('.value').textContent = student.roll_no ?? 'Roll';
+        infoRows[4].querySelector('.value').textContent = student.mobile_no ?? '01XXXXXXXXX';
+        infoRows[5].querySelector('.value').textContent = student.blood_group ?? 'N/A';
     };
 </script>
 @endsection
